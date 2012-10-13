@@ -208,14 +208,14 @@ namespace C3.XNA
 		/// Draws a filled rectangle
 		/// </summary>
 		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x1">The X coord of the left side</param>
-		/// <param name="y1">The Y coord of the upper side</param>
-		/// <param name="x2">The X coord of the right side</param>
-		/// <param name="y2">The Y coord of the bottom side</param>
+		/// <param name="x">The X coord of the left side</param>
+		/// <param name="y">The Y coord of the upper side</param>
+		/// <param name="w">Width</param>
+		/// <param name="h">Height</param>
 		/// <param name="color">The color to draw the rectangle in</param>
-		public static void FillRectangle(this SpriteBatch spriteBatch, float x1, float y1, float x2, float y2, Color color)
+		public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color)
 		{
-			FillRectangle(spriteBatch, new Vector2(x1, y1), new Vector2(x2, y2), color, 0.0f);
+			FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, 0.0f);
 		}
 
 
@@ -223,15 +223,15 @@ namespace C3.XNA
 		/// Draws a filled rectangle
 		/// </summary>
 		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="x1">The X coord of the left side</param>
-		/// <param name="y1">The Y coord of the upper side</param>
-		/// <param name="x2">The X coord of the right side</param>
-		/// <param name="y2">The Y coord of the bottom side</param>
+		/// <param name="x">The X coord of the left side</param>
+		/// <param name="y">The Y coord of the upper side</param>
+		/// <param name="w">Width</param>
+		/// <param name="h">Height</param>
 		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the line</param>
-		public static void FillRectangle(this SpriteBatch spriteBatch, float x1, float y1, float x2, float y2, Color color, float thickness)
+		/// <param name="angle">The angle of the rectangle in radians</param>
+		public static void FillRectangle(this SpriteBatch spriteBatch, float x, float y, float w, float h, Color color, float angle)
 		{
-			FillRectangle(spriteBatch, new Vector2(x1, y1), new Vector2(x2, y2), color, thickness);
+			FillRectangle(spriteBatch, new Vector2(x, y), new Vector2(w, h), color, angle);
 		}
 
 		#endregion
@@ -247,7 +247,7 @@ namespace C3.XNA
 		/// <param name="color">The color to draw the rectangle in</param>
 		public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color)
 		{
-			DrawRectangle(spriteBatch, rect, color, 1.0f, new Vector2(rect.X, rect.Y));
+			DrawRectangle(spriteBatch, rect, color, 1.0f);
 		}
 
 
@@ -260,28 +260,14 @@ namespace C3.XNA
 		/// <param name="thickness">The thickness of the lines</param>
 		public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color, float thickness)
 		{
-			DrawRectangle(spriteBatch, rect, color, thickness, new Vector2(rect.X, rect.Y));
-		}
-
-
-		/// <summary>
-		/// Draws a rectangle with the thickness provided
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="rect">The rectangle to draw</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the lines</param>
-		/// <param name="rotateAround">The location to rotate the rectangle around</param>
-		public static void DrawRectangle(this SpriteBatch spriteBatch, Rectangle rect, Color color, float thickness, Vector2 rotateAround)
-		{
 
 			// TODO: Handle rotations
 			// TODO: Figure out the pattern for the offsets required and then handle it in the line instead of here
 
 			DrawLine(spriteBatch, new Vector2(rect.X, rect.Y), new Vector2(rect.Right, rect.Y), color, thickness); // top
-			DrawLine(spriteBatch, new Vector2(rect.X + 1f, rect.Y), new Vector2(rect.X + 1f, rect.Bottom + 1f), color, thickness); // left
+			DrawLine(spriteBatch, new Vector2(rect.X + 1f, rect.Y), new Vector2(rect.X + 1f, rect.Bottom + thickness), color, thickness); // left
 			DrawLine(spriteBatch, new Vector2(rect.X, rect.Bottom), new Vector2(rect.Right, rect.Bottom), color, thickness); // bottom
-			DrawLine(spriteBatch, new Vector2(rect.Right + 1f, rect.Y), new Vector2(rect.Right + 1f, rect.Bottom + 1f), color, thickness); // right
+			DrawLine(spriteBatch, new Vector2(rect.Right + 1f, rect.Y), new Vector2(rect.Right + 1f, rect.Bottom + thickness), color, thickness); // right
 		}
 
 
@@ -294,7 +280,7 @@ namespace C3.XNA
 		/// <param name="color">The color to draw the rectangle in</param>
 		public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color)
 		{
-			DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, 1.0f, location);
+			DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, 1.0f);
 		}
 
 
@@ -308,22 +294,7 @@ namespace C3.XNA
 		/// <param name="thickness">The thickness of the line</param>
 		public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float thickness)
 		{
-			DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, thickness, location);
-		}
-
-
-		/// <summary>
-		/// Draws a rectangle with the thickness provided
-		/// </summary>
-		/// <param name="spriteBatch">The destination drawing surface</param>
-		/// <param name="location">Where to draw</param>
-		/// <param name="size">The size of the rectangle</param>
-		/// <param name="color">The color to draw the rectangle in</param>
-		/// <param name="thickness">The thickness of the line</param>
-		/// <param name="rotateAround">Rotate around this point</param>
-		public static void DrawRectangle(this SpriteBatch spriteBatch, Vector2 location, Vector2 size, Color color, float thickness, Vector2 rotateAround)
-		{
-			DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, thickness, rotateAround);
+			DrawRectangle(spriteBatch, new Rectangle((int)location.X, (int)location.Y, (int)size.X, (int)size.Y), color, thickness);
 		}
 
 		#endregion
